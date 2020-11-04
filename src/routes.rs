@@ -1,42 +1,3 @@
-// use actix_web::{web, App, HttpResponse, HttpServer, Responder, get};
-
-
-// const PATH: &'static str = "repos";
-
-// #[get("/")]
-// pub async fn index() -> impl Responder {
-//     HttpResponse::Ok().body(format!("{}{}{}","<h1>", get_dir(), "</h1>"))
-// }
-
-// /// get directory from PATH
-// fn get_dir() -> String {
-//     let paths = std::fs::read_dir(PATH).unwrap();
-//     let mut result: Vec<char> = vec![];
-//     for path in paths {
-//         let dir = match path {
-//             Ok(ref a) => a,
-//             _ => unreachable!(),
-//         }.path().to_str().unwrap().chars().collect::<Vec<char>>();
-//         result.extend(dir.iter());
-//         result.extend("<br>".chars());
-//     };
-//     result.iter().collect::<String>()
-// }
-
-// #[actix_rt::main]
-// pub async fn server_run() -> std::io::Result<()> {
-// 	HttpServer::new(|| {
-// 		App::new()
-// 			.service(index)
-//     })
-//     .bind("127.0.0.1:8000")?
-//     .run()
-//     .await
-// }
-
-
-// ----------------------------------------------------------------
-
 use std::collections::HashMap;
 
 use actix_http::{body::Body, Response};
@@ -71,8 +32,7 @@ pub async fn server_run() -> std::io::Result<()> {
     env_logger::init();
 
     HttpServer::new(|| {
-        let tera =
-            Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
+        let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
 
         App::new()
             .data(tera)
