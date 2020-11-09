@@ -16,6 +16,7 @@ async fn index(
         // submitted form
         let mut ctx = tera::Context::new();
         ctx.insert("name", &name.to_owned());
+        ctx.insert("list", &vec![1,2,3,4,5,6,7]);
         ctx.insert("text", &"Welcome!".to_owned());
         tmpl.render("user.html", &ctx)
             .map_err(|_| error::ErrorInternalServerError("Template error"))?
@@ -33,7 +34,6 @@ pub async fn server_run() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         let tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
-
         App::new()
             .data(tera)
             .wrap(middleware::Logger::default()) // enable logger

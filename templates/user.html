@@ -10,5 +10,8 @@
 		<p>
 			{{ text }}
 		</p>
+		{% for item in list %}
+		<li>{{ loop.index }}: {{ item }}</li>
+		{% endfor %}
 	</body>
 </html>
