@@ -27,6 +27,24 @@ async fn index(
     Ok(HttpResponse::Ok().content_type("text/html").body(s))
 }
 
+async fn view_user(
+    tmpl: web::Data<tera::Tera>,
+    query: web::Query<HashMap<String, String>>,
+) -> Result<HttpResponse, Error> {
+    let name = query.get("name");
+    // submitted form
+    let mut ctx = tera::Context::new();
+    ctx.insert("name", &name.to_owned());
+    ctx.insert("list", &vec![1,2,3,4,5,6,7]);
+    ctx.insert("text", &"Welcome!".to_owned());
+    let s = tmpl.render("user.html", &ctx)
+        .map_err(|_| error::ErrorInternalServerError("Template error")).unwrap();
+    Ok(HttpResponse::Ok().content_type("text/html").body(s))
+}
+
+use crate::controllers::home_controller::HomeController;
+use crate::controllers::preludes::Controller;
+
 #[actix_web::main]
 pub async fn server_run() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
@@ -37,7 +55,10 @@ pub async fn server_run() -> std::io::Result<()> {
         App::new()
             .data(tera)
             .wrap(middleware::Logger::default()) // enable logger
-            .service(web::resource("/").route(web::get().to(index)))
+            // .service(web::resource("/").route(web::get().to(index)))
+            .service(get!("/", HomeController::index))
+            // .service(web::resource("/user").route(web::get().to(view_user)))
+            .service(get!("/user",view_user))
             .service(web::scope("").wrap(error_handlers()))
     })
     .bind("127.0.0.1:8080")?

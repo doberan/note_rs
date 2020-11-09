@@ -1,5 +1,5 @@
-mod routes;
+mod controllers;
 
 fn main() -> std::io::Result<()> {
-    routes::server_run()
+    controllers::routers::server_run()
 }
