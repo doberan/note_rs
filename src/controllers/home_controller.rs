@@ -10,7 +10,7 @@ pub struct HomeController;
 impl Controller for HomeController {
 	async fn index(
 		tmpl: web::Data<tera::Tera>,
-		query: web::Query<HashMap<String, String>>,
+		_: web::Query<HashMap<String, String>>,
 	) -> Result<HttpResponse, Error> {
 		let s = tmpl.render("index.html", &tera::Context::new())
 			.map_err(|_| error::ErrorInternalServerError("Template error"))?;
